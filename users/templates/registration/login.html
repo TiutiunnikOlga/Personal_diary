@@ -1,0 +1,84 @@
+{% extends 'users/includes/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form id="loginForm" method="post" action="{% url 'accounts:login' %}">
+                {% csrf_token %}
+
+
+                <div class="text-center mb-4">
+                    <img class="mb-4" src="{% static 'images/logo.png' %}" alt="Логотип" width="72" height="57">
+                    <h1 class="h3 mb-3 fw-normal">Вход в систему</h1>
+                </div>
+
+                <!-- Поле Email (теперь корректно отображается как username) -->
+                <div class="form-floating mb-3">
+                    <input type="email"
+                           class="form-control {% if form.username.errors %}is-invalid{% endif %}"
+                           id="floatingInput"
+                           name="username"
+                           placeholder="name@example.com"
+                           required
+                           value="{{ form.username.value|default:'' }}">
+                    <label for="floatingInput">Эл. адрес</label>
+                    <!-- Вывод ошибок -->
+                    {% if form.username.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.username.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Поле Пароль -->
+                <div class="form-floating mb-3">
+                    <input type="password"
+                           class="form-control {% if form.password.errors %}is-invalid{% endif %}"
+                           id="floatingPassword"
+                           name="password"
+                           placeholder="Пароль"
+                           required>
+                    <label for="floatingPassword">Пароль</label>
+                    <!-- Вывод ошибок -->
+                    {% if form.password.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.password.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+
+                <!-- Чекбокс "Запомнить меня" -->
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="checkRemember" name="remember">
+                    <label class="form-check-label" for="checkRemember">Запомнить меня</label>
+                </div>
+
+
+                <!-- Кнопка отправки -->
+                <button class="btn btn-primary w-100 py-2" type="submit">
+                    Войти
+                </button>
+
+                <!-- Ссылка на восстановление пароля -->
+                <div class="mt-3 text-center">
+                    <a href="/password-reset/" class="text-muted">Забыли пароль?</a>
+                </div>
+
+                <!-- Общий вывод ошибок формы -->
+                {% if form.errors %}
+                    <div class="alert alert-danger mt-3" role="alert">
+                        Неверный email или пароль.
+                    </div>
+                {% endif %}
+
+
+                <p class="mt-5 mb-3 text-body-secondary text-center">&copy; 2026 Мой сайт</p>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

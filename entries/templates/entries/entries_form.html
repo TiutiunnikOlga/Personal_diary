@@ -1,0 +1,52 @@
+{% extends 'users/includes/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    body {
+        background-image: url({% static "images/forest.jfif" %});
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+    }
+</style>
+
+<div class="container mt-5">
+  <h1>{{ title }}</h1>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="mb-3">
+      <label for="{{ form.heading.id_for_label }}" class="form-label">Заголовок</label>
+      {{ form.heading }}
+      {% if form.heading.errors %}
+        <div class="text-danger">{{ form.heading.errors }}</div>
+      {% endif %}
+    </div>
+
+    <div class="mb-3">
+      <label for="{{ form.content.id_for_label }}" class="form-label">Содержимое</label>
+      {{ form.content }}
+      {% if form.content.errors %}
+        <div class="text-danger">{{ form.content.errors }}</div>
+      {% endif %}
+    </div>
+
+    <div class="mb-3">
+      <label for="{{ form.photo.id_for_label }}" class="form-label">Фото (опционально)</label>
+      {{ form.photo }}
+      {% if form.photo.errors %}
+        <div class="text-danger">{{ form.photo.errors }}</div>
+      {% endif %}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+  </form>
+</div>
+{% endblock %}

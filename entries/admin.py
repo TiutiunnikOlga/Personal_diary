@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from entries.models import Entries
+
+
+@admin.register(Entries)
+class UsrAdmin(admin.ModelAdmin):
+    list_filter = ("created_at",)
