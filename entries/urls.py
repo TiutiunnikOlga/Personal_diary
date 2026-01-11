@@ -1,13 +1,16 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
+from django.urls import path
 
-from entries.apps import EntriesConfig
-from entries.views import EntriesViewSet
+from entries.views import (EntriesCreateView, EntriesDeleteView,
+                           EntriesDetailView, EntriesListView,
+                           EntriesUpdateView, HomeView)
 
-app_name = EntriesConfig.name
-router = DefaultRouter()
-router.register(r'entries', EntriesViewSet)
+app_name = "entries"
 
 urlpatterns = [
-    path('entries/',include(router.urls) ),
+    path("", HomeView.as_view(), name="home"),
+    path("entries/", EntriesListView.as_view(), name="entries_list"),
+    path("<int:pk>/", EntriesDetailView.as_view(), name="entries_detail"),
+    path("new/", EntriesCreateView.as_view(), name="entries_create"),
+    path("<int:pk>/edit/", EntriesUpdateView.as_view(), name="entries_edit"),
+    path("<int:pk>/delete/", EntriesDeleteView.as_view(), name="entries_delete"),
 ]

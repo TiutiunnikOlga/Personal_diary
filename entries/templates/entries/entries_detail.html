@@ -1,0 +1,78 @@
+{% extends 'users/includes/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    body {
+        background-image: url({% static "images/forest.jfif" %});
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+    }
+    .entry-photo {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 20px auto;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="entry-card">
+                <!-- Заголовок -->
+                <h1 class="entry-title">{{ object.heading }}</h1>
+
+                <!-- Метаданные: автор и дата -->
+                <p class="entry-meta">
+                    Автор: {{ object.user.email }}<br>
+                    Дата: {{ object.created_at|date:"d E Y" }}
+                </p>
+
+                <!-- Содержимое -->
+                <div class="entry-content">
+                    {{ object.content|linebreaks }}
+                </div>
+
+                <!-- Фото (если есть) -->
+                {% if object.photo %}
+                    <img src="{{ object.photo.url }}" alt="Фото к записи" class="entry-photo">
+                {% endif %}
+
+                <!-- Кнопка «Назад» -->
+                <div class="mt-4">
+                    <!-- Кнопка «Назад» -->
+                    <a href="{% url 'entries:home' %}" class="btn btn-outline-secondary btn-back">
+                        ← Вернуться к списку записей
+                    </a>
+
+                    <!-- Кнопка «Изменить» -->
+                    {% if user.is_authenticated and user == object.user %}
+                        <a href="{% url 'entries:entries_edit' object.pk %}"
+                           class="btn btn-warning btn-edit">
+                            Изменить
+                        </a>
+
+                        <!-- Кнопка «Удалить» -->
+                        <a href="{% url 'entries:entries_delete' object.pk %}"
+                           class="btn btn-danger"
+                           onclick="return confirm('Вы уверены, что хотите удалить эту запись?')">
+                            Удалить
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+  </form>
+</div>
+{% endblock %}
