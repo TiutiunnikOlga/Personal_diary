@@ -7,11 +7,13 @@ class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, style={"input_type": "password"})
 
     def validate_email(self, value):
+        """Проверяем уникальность email"""
         if User.objects.filter(email=value).exists():
             raise ValidationError("Email уже зарегистрирован.")
         return value
 
     def create(self, validated_data):
+        """Создаем пользователя на основе проверенных данных"""
         user = User.objects.create_user(
             email=validated_data["email"],
             password=validated_data["password"],

@@ -1,8 +1,13 @@
 from django.urls import path
 
-from entries.views import (EntriesCreateView, EntriesDeleteView,
-                           EntriesDetailView, EntriesListView,
-                           EntriesUpdateView, HomeView)
+from entries.views import (
+    EntriesCreateView,
+    EntriesDeleteView,
+    EntriesDetailView,
+    EntriesListView,
+    EntriesUpdateView,
+    HomeView,
+)
 
 app_name = "entries"
 

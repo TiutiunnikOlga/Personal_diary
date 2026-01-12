@@ -7,6 +7,7 @@ from django.db import models
 def generate_token():
     return uuid.uuid4().hex
 
+
 class User(AbstractUser):
     username = None
     email = models.EmailField(unique=True, verbose_name="email")
@@ -27,14 +28,15 @@ class User(AbstractUser):
     token = models.CharField(
         max_length=100, verbose_name="Token", blank=True, null=True
     )
-    is_email_confirmed = models.BooleanField(default=False, verbose_name="Email подтверждён")
+    is_email_confirmed = models.BooleanField(
+        default=False, verbose_name="Email подтверждён"
+    )
     email_confirmation_token = models.CharField(
         max_length=32,
         default=generate_token,
         editable=False,
         unique=True,
-        verbose_name="Токен подтверждения"
-
+        verbose_name="Токен подтверждения",
     )
 
     USERNAME_FIELD = "email"
