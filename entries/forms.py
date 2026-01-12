@@ -31,9 +31,7 @@ class EntriesForm(forms.ModelForm):
         }
 
     def clean_heading(self):
-        """
-        Валидация заголовка (пример).
-        """
+        """Валидация заголовка"""
         heading = self.cleaned_data.get("heading")
         if len(heading) < 3:
             raise forms.ValidationError("Заголовок должен быть не короче 3 символов.")
