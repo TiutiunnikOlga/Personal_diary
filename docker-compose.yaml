@@ -18,14 +18,14 @@ services:
     build:
       context: .
       dockerfile: docker/django/Dockerfile
-    command: python manage.py runserver 0.0.0.0:8080
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./Gud_habit:/app
       - static_volume:/static
     networks:
       - app_network
     ports:
-      - "8080:8080"
+      - "8080:8000"
     environment:
       - DJANGO_SETTINGS_MODULE=Personal_diary.settings
     env_file:
