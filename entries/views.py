@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, render
@@ -7,9 +8,14 @@ from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
 
 from entries.forms import EntriesForm
 from entries.models import Entries
+from users.mixins import EmailConfirmedRequiredMixin
 
 
-class EntriesListView(LoginRequiredMixin, ListView):
+@login_required(login_url='/login/')
+def home_view(request):
+    return render(request, 'login.html')
+
+class EntriesListView(EmailConfirmedRequiredMixin, ListView):
     model = Entries
     template_name = "entries/entries_list.html"
     context_object_name = "entries"
@@ -20,23 +26,9 @@ class EntriesListView(LoginRequiredMixin, ListView):
         query = self.request.GET.get("q")
         if query:
             queryset = queryset.filter(
-                Q(title__icontains=query) | Q(content__icontains=query)
+                Q(heading__icontains=query) | Q(content__icontains=query)
             )
         return queryset
-
-    def entries_list(request):
-        query = request.GET.get('q', '')
-        if query:
-
-            posts = Entries.objects.filter(
-                heading__icontains=query
-            ) | Entries.objects.filter(
-                content__icontains=query
-            )
-        else:
-            posts = Entries.objects.all()
-
-        return render(request, 'entries/list.html', {'posts': posts})
 
 
     def get_context_data(self, **kwargs):
@@ -45,7 +37,7 @@ class EntriesListView(LoginRequiredMixin, ListView):
         return context
 
 
-class EntriesDetailView(LoginRequiredMixin, DetailView):
+class EntriesDetailView(EmailConfirmedRequiredMixin, DetailView):
     model = Entries
     template_name = "entries/entries_detail.html"
     context_object_name = "entries"
@@ -55,7 +47,7 @@ class EntriesDetailView(LoginRequiredMixin, DetailView):
         return obj
 
 
-class EntriesCreateView(LoginRequiredMixin, CreateView):
+class EntriesCreateView(EmailConfirmedRequiredMixin, CreateView):
     model = Entries
     form_class = EntriesForm
     template_name = "entries/entries_form.html"
@@ -73,7 +65,7 @@ class EntriesCreateView(LoginRequiredMixin, CreateView):
         return reverse_lazy("entries:entries_detail", kwargs={"pk": self.object.pk})
 
 
-class EntriesUpdateView(LoginRequiredMixin, UpdateView):
+class EntriesUpdateView(EmailConfirmedRequiredMixin, UpdateView):
     model = Entries
     form_class = EntriesForm
     template_name = "entries/entries_form.html"
@@ -91,7 +83,7 @@ class EntriesUpdateView(LoginRequiredMixin, UpdateView):
         return reverse_lazy("entries:entries_detail", kwargs={"pk": self.object.pk})
 
 
-class EntriesDeleteView(LoginRequiredMixin, DeleteView):
+class EntriesDeleteView(EmailConfirmedRequiredMixin, DeleteView):
     model = Entries
     template_name = "entries/entries_confirm_delete.html"
     context_object_name = "entries"
@@ -104,7 +96,7 @@ class EntriesDeleteView(LoginRequiredMixin, DeleteView):
         return reverse_lazy("entries:home")
 
 
-class HomeView(LoginRequiredMixin, ListView):
+class HomeView(EmailConfirmedRequiredMixin, ListView):
     model = Entries
     template_name = "home.html"
     context_object_name = "posts"

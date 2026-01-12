@@ -48,6 +48,27 @@
                 </svg>
             </button>
         </div>
+        {% if entries %}
+        <ul>
+            {% for entry in entries %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ entry.heading }}</h5>
+                    <p class="card-text text-muted">{{ entry.content|truncatewords:30 }}</p>
+                    <small class="text-secondary">Создано: {{ entry.created_at|date:"d.m.Y" }}</small>
+
+                    <!-- Кнопка «Просмотр» -->
+                    <div class="mt-2">
+                        <a href="{% url 'entries:entries_detail' entry.pk %}"
+                           class="btn btn-sm btn-outline-primary">
+                            Просмотр
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </ul>
+        {% endif %}
     </form>
     {% if posts %}
     <div class="row mt-4">
@@ -73,8 +94,6 @@
         </div>
         {% endfor %}
     </div>
-    {% else %}
-    <p class="text-center text-muted">Записей пока нет. Создайте первую!</p>
     {% endif %}
 </main>
 {% endblock %}
